@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0d13">
+<title>Tonos</title>
+<link rel="icon" href="icons/favicon.ico" sizes="48x48">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="icons/favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="icons/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><h1>Tonos</h1><span>Tone generator</span></div>
+    <div class="transport" role="group" aria-label="Transport">
+      <button id="bPlay" type="button" class="play" aria-pressed="false">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5z"/></svg>Play</button>
+      <button id="bStop" type="button" class="stop">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="2" width="8" height="8" rx="1"/></svg>Stop</button>
+    </div>
+  </header>
+
+  <section class="readouts">
+    <div class="ro key"><small>Note</small><output id="rNote">—</output></div>
+    <div class="ro"><small>Period</small><output id="rPer">—</output></div>
+    <div class="ro"><small>Wavelength <i>(air, 343 m/s)</i></small><output id="rWl">—</output></div>
+    <div class="ro key"><small>Level <i>(dBFS)</i></small><output id="rLvl">—</output></div>
+  </section>
+
+  <main class="scope" id="scopeWrap">
+    <canvas id="scope" aria-label="Oscilloscope view of the output waveform"></canvas>
+  </main>
+
+  <section class="panel" aria-label="Tone settings">
+    <div class="freqrow">
+      <button type="button" class="step" id="bHalf" title="Half frequency (one octave down)">½</button>
+      <button type="button" class="step" id="bDec" title="−1 Hz (hold to repeat)">−1</button>
+      <div class="freqbox">
+        <input id="iFreq" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-label="Frequency in hertz">
+        <span>Hz</span>
+      </div>
+      <button type="button" class="step" id="bInc" title="+1 Hz (hold to repeat)">+1</button>
+      <button type="button" class="step" id="bDbl" title="Double frequency (one octave up)">×2</button>
+    </div>
+
+    <div class="sliderwrap">
+      <input id="sFreq" type="range" min="0" max="10000" step="1" aria-label="Frequency (logarithmic)">
+      <div class="ticks" id="ticks" aria-hidden="true"></div>
+    </div>
+
+    <div class="opts">
+      <div class="ctl"><span class="lab">Waveform</span>
+        <div class="seg" id="segWave" role="radiogroup" aria-label="Waveform">
+          <button type="button" role="radio" data-v="sine" title="Sine"><svg viewBox="0 0 24 12"><path d="M1 6c2.75-6.5 8.25-6.5 11 0s8.25 6.5 11 0"/></svg>Sine</button>
+          <button type="button" role="radio" data-v="square" title="Square"><svg viewBox="0 0 24 12"><path d="M1 10V2h11v8h11V2"/></svg>Square</button>
+          <button type="button" role="radio" data-v="triangle" title="Triangle"><svg viewBox="0 0 24 12"><path d="M1 10 6.5 2 12 10 17.5 2 23 10"/></svg>Tri</button>
+          <button type="button" role="radio" data-v="sawtooth" title="Sawtooth"><svg viewBox="0 0 24 12"><path d="M1 10 12 2v8l11-8v8"/></svg>Saw</button>
+        </div>
+      </div>
+
+      <div class="ctl"><label for="sNote">Note</label>
+        <div class="notepick">
+          <button type="button" class="mini" id="bSemiDn" title="One semitone down">−st</button>
+          <select id="sNote"></select>
+          <select id="sOct" aria-label="Octave"></select>
+          <button type="button" class="mini" id="bSemiUp" title="One semitone up">+st</button>
+        </div>
+      </div>
+
+      <div class="ctl"><label for="iA4">A4 ref</label>
+        <div class="a4"><input id="iA4" type="text" inputmode="decimal" autocomplete="off"><span>Hz</span></div>
+      </div>
+
+      <div class="ctl"><span class="lab">Output</span>
+        <div class="seg" id="segChan" role="radiogroup" aria-label="Output channel">
+          <button type="button" role="radio" data-v="L">L</button>
+          <button type="button" role="radio" data-v="both">L+R</button>
+          <button type="button" role="radio" data-v="R">R</button>
+        </div>
+      </div>
+
+      <div class="ctl"><label for="sRange">Scope</label>
+        <div class="notepick">
+          <select id="sRange" title="Scope height: level shown at the top edge"></select>
+          <select id="sCyc" aria-label="Time base" title="Time base"></select>
+        </div>
+      </div>
+
+      <div class="ctl vol"><label for="sVol">Volume <output id="vVol"></output></label>
+        <input id="sVol" type="range" min="-60" max="0" step="0.5">
+      </div>
+    </div>
+  </section>
+</div>
+<script src="app.js" defer></script>
+</body>
+</html>

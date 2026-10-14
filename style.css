@@ -1,0 +1,108 @@
+/* Tonos — sibling of Spektre: same instrument-screen tokens.
+   Layout: header + transport, readout strip, oscilloscope (fills), control panel */
+:root{
+  --bg:#0a0d13;
+  --panel:#10151e;
+  --edge:#232b3a;
+  --edge-hi:#3a4558;
+  --fg:#dfe4ee;
+  --muted:#7f8a9e;
+  --trace:#ffb547;
+  --hold:#7fd3ff;
+  --warn:#ff7a66;
+  --f-label:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-num:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.4 var(--f-label);-webkit-tap-highlight-color:transparent}
+.app{height:100%;display:flex;flex-direction:column;gap:8px;overflow:hidden;
+  padding-inline:max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-right));
+  padding-block:calc(8px + env(safe-area-inset-top,0px)) calc(10px + env(safe-area-inset-bottom,0px))}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand h1{margin:0;font-weight:700;font-size:20px;letter-spacing:.12em;text-transform:uppercase;color:var(--trace)}
+.brand span{color:var(--muted);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+
+button{font:600 13px/1 var(--f-label);letter-spacing:.07em;text-transform:uppercase;color:var(--fg);
+  background:var(--panel);border:1px solid var(--edge);border-radius:4px;padding:7px 10px;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;touch-action:manipulation;user-select:none}
+button:hover{border-color:var(--edge-hi)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--hold);outline-offset:2px}
+button svg{width:12px;height:12px;fill:currentColor}
+
+.transport{display:flex;gap:6px}
+.transport button{padding:8px 14px;font-size:14px}
+.play[aria-pressed="true"]{background:var(--trace);border-color:var(--trace);color:var(--bg);box-shadow:0 0 14px color-mix(in srgb,var(--trace) 45%,transparent)}
+.stop{color:var(--muted)}
+
+/* readouts */
+.readouts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--edge);
+  border:1px solid var(--edge);border-radius:6px;overflow:hidden}
+.ro{background:var(--panel);padding:5px 10px;min-width:0}
+.ro small{display:block;color:var(--muted);font-size:11px;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ro small i{font-style:normal;letter-spacing:.04em;text-transform:none;opacity:.8}
+.ro output{display:block;font:600 14px/1.3 var(--f-num);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ro.key output{color:var(--trace)}
+
+/* scope */
+.scope{flex:1 1 0;min-height:150px;position:relative;background:var(--panel);border:1px solid var(--edge);border-radius:6px;overflow:hidden}
+.scope canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* control panel */
+.panel{display:flex;flex-direction:column;gap:10px;background:var(--panel);border:1px solid var(--edge);border-radius:6px;padding:12px 14px}
+
+.freqrow{display:flex;align-items:stretch;justify-content:center;gap:8px}
+.step{min-width:52px;font:600 16px/1 var(--f-num);letter-spacing:0;text-transform:none}
+.freqbox{display:flex;align-items:baseline;gap:8px;background:var(--bg);border:1px solid var(--edge);border-radius:4px;padding:2px 14px;min-width:0}
+.freqbox:focus-within{border-color:var(--trace)}
+.freqbox input{width:7.2ch;background:transparent;border:0;outline:0;color:var(--trace);text-align:right;
+  font:600 38px/1.15 var(--f-num);font-variant-numeric:tabular-nums;padding:0}
+.freqbox span{color:var(--muted);font:600 15px var(--f-num)}
+
+.sliderwrap{position:relative;padding-bottom:16px}
+input[type=range]{accent-color:var(--trace);width:100%;margin:0}
+.ticks{position:absolute;left:0;right:0;bottom:0;height:14px;font:11px var(--f-num);color:var(--muted)}
+.ticks span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+
+.opts{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 18px}
+.ctl{display:flex;flex-direction:column;gap:4px;min-width:0}
+.ctl label,.ctl .lab{color:var(--muted);font-size:11px;letter-spacing:.09em;text-transform:uppercase}
+.ctl label output{color:var(--fg);font:12px var(--f-num);letter-spacing:0;text-transform:none;margin-left:4px}
+
+.seg{display:inline-flex}
+.seg button{border-radius:0;margin-left:-1px}
+.seg button:first-child{border-radius:4px 0 0 4px;margin-left:0}
+.seg button:last-child{border-radius:0 4px 4px 0}
+.seg button svg{width:22px;height:11px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+.seg button[aria-checked="true"]{border-color:var(--trace);color:var(--trace);position:relative;z-index:1}
+
+select,.a4 input{font:12px var(--f-num);color:var(--fg);background:var(--bg);border:1px solid var(--edge);border-radius:4px;padding:6px 7px}
+.notepick{display:flex;gap:4px}
+.mini{padding:6px 8px;font:600 12px var(--f-num);letter-spacing:0;text-transform:none}
+.a4{display:flex;align-items:center;gap:6px}
+.a4 input{width:7ch;text-align:right}
+.a4 span{color:var(--muted);font:12px var(--f-num)}
+.vol{flex:1 1 220px;max-width:360px}
+.vol input{margin-block:6px}
+
+@media (max-width:760px){
+  .app{height:auto;min-height:100%;overflow:visible}
+  .scope{flex:none;height:30vh}
+  .readouts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ro:nth-child(3) small i{display:none}
+  .ro output{font-size:13px}
+  .freqrow{gap:5px}
+  .step{min-width:0;flex:1 1 0;padding-inline:4px;font-size:14px}
+  .freqbox{flex:0 1 auto;padding:2px 8px}
+  .freqbox input{font-size:26px;width:7ch}
+  .opts{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+  .vol{max-width:none}
+  .seg{display:flex}.seg button{flex:1 1 0}
+  .notepick select{flex:1 1 0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
